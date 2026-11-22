@@ -29,6 +29,9 @@
                 <article class="surface-card flex h-full flex-col p-5">
                     <div class="flex flex-wrap items-center gap-2">
                         <x-status-badge :status="$bookRequest->status" />
+                        @if ($isOwner)
+                            <span class="badge border-accent/25 bg-accent/10 text-accent-bright">Usulan Anda</span>
+                        @endif
                         <span class="badge border-line bg-white/5 text-body">
                             <x-icon name="star" class="h-3.5 w-3.5" />
                             {{ $bookRequest->votes->count() }} vote

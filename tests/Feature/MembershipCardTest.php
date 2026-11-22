@@ -23,19 +23,63 @@ class MembershipCardTest extends TestCase
                 'password_confirmation' => 'Perpusa123!',
                 'role' => User::ROLE_USER,
                 'is_active' => 1,
+                'nickname' => 'Dewi',
+                'birth_place' => 'Bandung',
+                'birth_date' => '2001-05-12',
+                'school' => 'SMA Negeri 1 Bandung',
                 'phone' => '08123456789',
-                'address' => 'Bandung',
+                'parent_phone' => '08198765432',
+                'address' => 'Jl. Melati No. 3, Bandung',
             ])
             ->assertRedirect(route('admin.cards.index'));
 
         $member = User::query()->where('username', 'dewi')->firstOrFail();
 
         $this->assertTrue($member->is_active);
+        $this->assertDatabaseHas('users', [
+            'id' => $member->id,
+            'nickname' => 'Dewi',
+            'birth_place' => 'Bandung',
+            'school' => 'SMA Negeri 1 Bandung',
+            'parent_phone' => '08198765432',
+            'address' => 'Jl. Melati No. 3, Bandung',
+        ]);
+        $this->assertSame('2001-05-12', $member->fresh()->birth_date?->toDateString());
         $this->assertDatabaseHas('member_cards', [
             'user_id' => $member->id,
             'status' => MemberCard::STATUS_ACTIVE,
         ]);
         $this->assertStringStartsWith('PPS-', $member->memberCard->card_number);
+    }
+
+    public function test_card_page_shows_card_data_and_contact_fallbacks(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $member = User::factory()->create([
+            'name' => 'Dewi Lestari',
+            'nickname' => 'Dewi',
+            'birth_place' => 'Bandung',
+            'birth_date' => '2001-05-12',
+            'school' => 'SMA Negeri 1 Bandung',
+            'phone' => '08123456789',
+            'parent_phone' => '08198765432',
+            'address' => 'Jl. Melati No. 3, Bandung',
+        ]);
+        MemberCard::factory()->create(['user_id' => $member->id]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.cards.index'))
+            ->assertOk()
+            ->assertSee('Dewi Lestari')
+            ->assertSee('Dewi')
+            ->assertSee('Bandung, 12 May 2001')
+            ->assertSee('SMA Negeri 1 Bandung')
+            ->assertSee('WhatsApp:')
+            ->assertSee('08123456789')
+            ->assertSee('Orang tua:')
+            ->assertSee('08198765432')
+            ->assertSee('Alamat:')
+            ->assertSee('Jl. Melati No. 3, Bandung');
     }
 
     public function test_admin_account_does_not_receive_a_membership_card(): void

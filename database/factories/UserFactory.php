@@ -27,10 +27,15 @@ class UserFactory extends Factory
         return [
             'username' => 'user'.fake()->unique()->numberBetween(1000, 999999),
             'name' => fake()->name(),
+            'nickname' => fake()->firstName(),
+            'birth_place' => fake()->city(),
+            'birth_date' => fake()->dateTimeBetween('-30 years', '-12 years'),
+            'school' => ucwords(fake()->words(3, true)),
             'password' => static::$password ??= Hash::make('password'),
             'role' => User::ROLE_USER,
             'is_active' => true,
             'phone' => fake()->phoneNumber(),
+            'parent_phone' => fake()->phoneNumber(),
             'address' => fake()->address(),
             'remember_token' => Str::random(10),
         ];

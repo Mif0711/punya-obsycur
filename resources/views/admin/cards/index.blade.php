@@ -55,11 +55,36 @@
                         </span>
                         <div class="min-w-0">
                             <p class="truncate text-sm font-semibold text-ink">{{ $card->user?->name }}</p>
-                            <p class="truncate text-xs text-muted">@ {{ $card->user?->username }} · {{ $card->user?->phone ?: 'tanpa telepon' }}</p>
+                            <p class="truncate text-xs text-muted">
+                                @ {{ $card->user?->username }}
+                                @if ($card->user?->nickname)
+                                    · {{ $card->user->nickname }}
+                                @endif
+                            </p>
                         </div>
                     </div>
 
                     <dl class="relative mt-3 grid grid-cols-2 gap-2 text-xs">
+                        <div class="col-span-2">
+                            <dt class="text-muted">Tempat, tanggal lahir</dt>
+                            <dd class="text-body">
+                                {{ $card->user?->birth_place ?: '—' }}{{ $card->user?->birth_date ? ', '.$card->user->birth_date->translatedFormat('d M Y') : '' }}
+                            </dd>
+                        </div>
+                        <div class="col-span-2">
+                            <dt class="text-muted">Sekolah</dt>
+                            <dd class="text-body">{{ $card->user?->school ?: '—' }}</dd>
+                        </div>
+                        <div class="col-span-2">
+                            <dt class="text-muted">Kontak (urutan prioritas)</dt>
+                            <dd class="space-y-1 text-body">
+                                @forelse ($card->user?->contactChannels() ?? [] as $channel)
+                                    <p class="truncate"><span class="text-muted">{{ $channel['label'] }}:</span> {{ $channel['value'] }}</p>
+                                @empty
+                                    <p>—</p>
+                                @endforelse
+                            </dd>
+                        </div>
                         <div>
                             <dt class="text-muted">Terbit</dt>
                             <dd class="text-body">{{ $card->issued_at?->translatedFormat('d M Y') }}</dd>

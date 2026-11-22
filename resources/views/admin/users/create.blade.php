@@ -31,6 +31,32 @@
 
             <div class="grid gap-4 sm:grid-cols-2">
                 <div>
+                    <label for="nickname" class="field-label">Nama Panggilan</label>
+                    <input id="nickname" name="nickname" type="text" value="{{ old('nickname') }}" maxlength="100" class="field-input" placeholder="Nama yang dipanggil sehari-hari" />
+                    @error('nickname') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="school" class="field-label">Sekolah</label>
+                    <input id="school" name="school" type="text" value="{{ old('school') }}" maxlength="150" class="field-input" placeholder="Nama sekolah" />
+                    @error('school') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                    <label for="birth_place" class="field-label">Tempat Lahir</label>
+                    <input id="birth_place" name="birth_place" type="text" value="{{ old('birth_place') }}" maxlength="150" class="field-input" placeholder="Kota kelahiran" />
+                    @error('birth_place') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="birth_date" class="field-label">Tanggal Lahir</label>
+                    <input id="birth_date" name="birth_date" type="date" value="{{ old('birth_date') }}" class="field-input" />
+                    @error('birth_date') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div>
                     <label for="password" class="field-label">Kata Sandi</label>
                     <input id="password" name="password" type="password" required minlength="8" class="field-input" />
                     @error('password') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
@@ -41,7 +67,7 @@
                 </div>
             </div>
 
-            <div class="grid gap-4 sm:grid-cols-2">
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                     <label for="role" class="field-label">Peran</label>
                     <select id="role" name="role" required class="field-input">
@@ -52,15 +78,22 @@
                     @error('role') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label for="phone" class="field-label">Telepon</label>
+                    <label for="phone" class="field-label">No. WhatsApp</label>
                     <input id="phone" name="phone" type="text" value="{{ old('phone') }}" maxlength="30" class="field-input" placeholder="08…" />
                     @error('phone') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="parent_phone" class="field-label">No. Orang Tua</label>
+                    <input id="parent_phone" name="parent_phone" type="text" value="{{ old('parent_phone') }}" maxlength="30" class="field-input" placeholder="08…" />
+                    <p class="mt-1 text-xs text-muted">Dihubungi saat anggota tidak merespons.</p>
+                    @error('parent_phone') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
                 </div>
             </div>
 
             <div>
                 <label for="address" class="field-label">Alamat</label>
-                <textarea id="address" name="address" rows="3" maxlength="500" class="field-input resize-y">{{ old('address') }}</textarea>
+                <textarea id="address" name="address" rows="3" maxlength="500" class="field-input resize-y" placeholder="Alamat lengkap">{{ old('address') }}</textarea>
+                <p class="mt-1 text-xs text-muted">Cadangan bila WhatsApp dan nomor orang tua tidak dapat dihubungi.</p>
                 @error('address') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
             </div>
 

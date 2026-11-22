@@ -71,6 +71,13 @@
                     <textarea id="description" name="description" rows="5" maxlength="5000" class="field-input resize-y" placeholder="Ringkasan isi buku…">{{ old('description', $book?->description) }}</textarea>
                     @error('description') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
                 </div>
+
+                <div>
+                    <label for="keterangan" class="field-label">Keterangan (Cover Belakang)</label>
+                    <textarea id="keterangan" name="keterangan" rows="5" maxlength="5000" class="field-input resize-y" placeholder="Kesimpulan atau sinopsis yang biasanya tercetak di cover belakang buku…">{{ old('keterangan', $book?->keterangan) }}</textarea>
+                    <p class="mt-1 text-xs text-muted">Isi dengan ringkasan singkat yang membantu pembaca memutuskan untuk meminjam.</p>
+                    @error('keterangan') <p class="mt-1 text-xs text-danger">{{ $message }}</p> @enderror
+                </div>
             </section>
 
             <section class="surface-card space-y-4 p-6">

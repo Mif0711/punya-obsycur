@@ -40,9 +40,14 @@ class StoreUserRequest extends FormRequest
         return [
             'username' => ['required', 'string', 'max:50', 'regex:/^[a-z0-9_.-]+$/i', Rule::unique('users', 'username')],
             'name' => ['required', 'string', 'max:150'],
+            'nickname' => ['nullable', 'string', 'max:100'],
+            'birth_place' => ['nullable', 'string', 'max:150'],
+            'birth_date' => ['nullable', 'date', 'before:today'],
+            'school' => ['nullable', 'string', 'max:150'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', Rule::in([User::ROLE_ADMIN, User::ROLE_USER])],
             'phone' => ['nullable', 'string', 'max:30'],
+            'parent_phone' => ['nullable', 'string', 'max:30'],
             'address' => ['nullable', 'string', 'max:500'],
             'is_active' => ['boolean'],
         ];

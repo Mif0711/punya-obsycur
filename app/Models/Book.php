@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'author_id',
     'isbn',
     'description',
+    'keterangan',
     'cover_path',
     'average_rating',
     'editor_pick',

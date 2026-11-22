@@ -58,7 +58,16 @@
                     <x-status-badge :status="$memberCard?->status ?? 'pending'" :label="$memberCard?->status === 'active' ? 'Aktif' : null" />
                 </div>
             </div>
-            <p class="relative mt-3 text-[0.65rem] text-white/35">
+            <p class="relative mt-3 text-[0.65rem] leading-relaxed text-white/45">
+                @if ($user->nickname)
+                    Panggilan: {{ $user->nickname }}<br>
+                @endif
+                {{ $user->birth_place ?: '—' }}{{ $user->birth_date ? ', '.$user->birth_date->translatedFormat('d M Y') : '' }}
+                @if ($user->school)
+                    <br>Sekolah: {{ $user->school }}
+                @endif
+            </p>
+            <p class="relative mt-2 text-[0.65rem] text-white/35">
                 Terbit {{ $memberCard?->issued_at?->translatedFormat('d M Y') ?? '—' }} · Tunjukkan kartu saat meminjam.
             </p>
         </div>

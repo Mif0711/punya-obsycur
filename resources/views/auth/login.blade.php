@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" class="h-full">
 <head>
     <meta charset="utf-8">
@@ -109,16 +109,6 @@
                     </div>
                 @endif
 
-                <div class="mt-7 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 text-[0.7rem] text-white/40">
-                    <span class="font-semibold text-white/60">Akun demo</span>
-                    <span class="kbd">admin</span>
-                    <span>admin</span>
-                    <span class="text-white/20">·</span>
-                    <span class="kbd">budi</span>
-                    <span>anggota</span>
-                    <span class="text-white/20">·</span>
-                    <span class="kbd">Perpusa123!</span>
-                </div>
             </section>
 
             <!-- Supporting content so the page feels alive around the portal -->

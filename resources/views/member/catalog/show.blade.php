@@ -102,6 +102,13 @@
 
                 <p class="mt-4 whitespace-pre-line text-sm leading-relaxed text-body">{{ $book->description ?: 'Belum ada deskripsi untuk buku ini.' }}</p>
 
+                @if ($book->keterangan)
+                    <div class="mt-5 rounded-xl border border-line bg-white/[0.02] p-4">
+                        <h3 class="text-xs font-bold uppercase tracking-[0.14em] text-accent">Keterangan Buku</h3>
+                        <p class="mt-2 whitespace-pre-line text-sm leading-relaxed text-body">{{ $book->keterangan }}</p>
+                    </div>
+                @endif
+
                 @if (! empty($book->themes))
                     <div class="mt-4 flex flex-wrap gap-1.5">
                         @foreach ($book->themes as $theme)

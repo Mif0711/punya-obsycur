@@ -15,7 +15,20 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
-#[Fillable(['username', 'name', 'password', 'role', 'is_active', 'phone', 'address'])]
+#[Fillable([
+    'username',
+    'name',
+    'nickname',
+    'birth_place',
+    'birth_date',
+    'school',
+    'password',
+    'role',
+    'is_active',
+    'phone',
+    'parent_phone',
+    'address',
+])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -36,6 +49,7 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'birth_date' => 'date',
         ];
     }
 
@@ -55,6 +69,23 @@ class User extends Authenticatable
     public function isMember(): bool
     {
         return $this->role === self::ROLE_USER;
+    }
+
+    /**
+     * Contact options in the order they should be tried when following up on an overdue book.
+     *
+     * @return array<int, array{label: string, value: string}>
+     */
+    public function contactChannels(): array
+    {
+        return collect([
+            ['label' => 'WhatsApp', 'value' => $this->phone],
+            ['label' => 'Orang tua', 'value' => $this->parent_phone],
+            ['label' => 'Alamat', 'value' => $this->address],
+        ])
+            ->filter(fn (array $channel): bool => filled($channel['value']))
+            ->values()
+            ->all();
     }
 
     #[Scope]

@@ -30,6 +30,7 @@ class StoreBookRequest extends FormRequest
             'author_id' => ['required', 'exists:authors,id'],
             'isbn' => ['nullable', 'string', 'max:30', Rule::unique('books', 'isbn')],
             'description' => ['nullable', 'string', 'max:5000'],
+            'keterangan' => ['nullable', 'string', 'max:5000'],
             'cover' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'editor_pick' => ['boolean'],
             'award_winner' => ['boolean'],

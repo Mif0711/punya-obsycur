@@ -27,6 +27,7 @@ class BookFactory extends Factory
             'author_id' => Author::factory(),
             'isbn' => fake()->unique()->isbn13(),
             'description' => fake()->paragraph(),
+            'keterangan' => fake()->paragraph(),
             'average_rating' => fake()->randomFloat(1, 3, 5),
             'themes' => fake()->randomElements(['Ramadan', 'Musim Hujan', 'Liburan', 'Back to School'], 2),
         ];

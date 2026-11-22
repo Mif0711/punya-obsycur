@@ -37,14 +37,30 @@ class AdminUsersTest extends TestCase
                 'password_confirmation' => 'Perpusa123!',
                 'role' => User::ROLE_USER,
                 'is_active' => 1,
+                'nickname' => 'Dewi',
+                'birth_place' => 'Bandung',
+                'birth_date' => '2001-05-12',
+                'school' => 'SMA Negeri 1 Bandung',
                 'phone' => '08123456789',
-                'address' => 'Bandung',
+                'parent_phone' => '08198765432',
+                'address' => 'Jl. Melati No. 3, Bandung',
             ])
             ->assertRedirect(route('admin.users.index'));
 
         $member = User::query()->where('username', 'dewi')->firstOrFail();
 
         $this->assertTrue($member->isMember());
+        $this->assertDatabaseHas('users', [
+            'id' => $member->id,
+            'name' => 'Dewi Lestari',
+            'nickname' => 'Dewi',
+            'birth_place' => 'Bandung',
+            'school' => 'SMA Negeri 1 Bandung',
+            'phone' => '08123456789',
+            'parent_phone' => '08198765432',
+            'address' => 'Jl. Melati No. 3, Bandung',
+        ]);
+        $this->assertSame('2001-05-12', $member->fresh()->birth_date?->toDateString());
         $this->assertDatabaseHas('member_cards', [
             'user_id' => $member->id,
             'status' => MemberCard::STATUS_ACTIVE,
@@ -91,6 +107,24 @@ class AdminUsersTest extends TestCase
         $this->assertSame(2, User::query()->count());
     }
 
+    public function test_future_birth_date_is_rejected(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)
+            ->post(route('admin.users.store'), [
+                'username' => 'budi',
+                'name' => 'Budi Santoso',
+                'password' => 'Perpusa123!',
+                'password_confirmation' => 'Perpusa123!',
+                'role' => User::ROLE_USER,
+                'birth_date' => today()->addDay()->toDateString(),
+            ])
+            ->assertSessionHasErrors('birth_date');
+
+        $this->assertDatabaseMissing('users', ['username' => 'budi']);
+    }
+
     public function test_member_cannot_access_user_management(): void
     {
         $member = User::factory()->create();
@@ -106,7 +140,12 @@ class AdminUsersTest extends TestCase
         $member = User::factory()->create([
             'username' => 'budi',
             'name' => 'Budi Santoso',
+            'nickname' => 'Budi',
+            'birth_place' => 'Surabaya',
+            'birth_date' => '1999-03-02',
+            'school' => 'SMA Negeri 2 Surabaya',
             'phone' => '081200000002',
+            'parent_phone' => '081200000003',
             'address' => 'Jl. Melati No. 10',
         ]);
 
@@ -114,8 +153,13 @@ class AdminUsersTest extends TestCase
             ->put(route('admin.users.update', $member), [
                 'username' => 'BUDI.BARU',
                 'name' => 'Budi Prasetyo',
+                'nickname' => 'Budi P.',
+                'birth_place' => 'Yogyakarta',
+                'birth_date' => '1999-04-03',
+                'school' => 'SMA Negeri 3 Yogyakarta',
                 'role' => User::ROLE_USER,
                 'phone' => '081399999999',
+                'parent_phone' => '081399999998',
                 'address' => 'Jl. Anggrek No. 7',
                 'is_active' => 0,
             ])
@@ -125,11 +169,16 @@ class AdminUsersTest extends TestCase
             'id' => $member->id,
             'username' => 'budi.baru',
             'name' => 'Budi Prasetyo',
+            'nickname' => 'Budi P.',
+            'birth_place' => 'Yogyakarta',
+            'school' => 'SMA Negeri 3 Yogyakarta',
             'phone' => '081399999999',
+            'parent_phone' => '081399999998',
             'address' => 'Jl. Anggrek No. 7',
             'is_active' => false,
             'role' => User::ROLE_USER,
         ]);
+        $this->assertSame('1999-04-03', $member->fresh()->birth_date?->toDateString());
     }
 
     public function test_updating_user_without_a_password_keeps_the_current_password(): void

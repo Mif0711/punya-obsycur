@@ -80,6 +80,36 @@ class BookRequestVoteTest extends TestCase
         ]);
     }
 
+    public function test_member_cannot_vote_on_own_book_request(): void
+    {
+        $owner = User::factory()->create();
+        $bookRequest = BookRequest::factory()->create(['user_id' => $owner->id]);
+
+        $this->actingAs($owner)
+            ->post(route('member.book-requests.vote', $bookRequest), [
+                'comment' => 'Saya sendiri yang mengajukan buku ini.',
+            ])
+            ->assertForbidden();
+
+        $this->assertDatabaseMissing('book_request_votes', [
+            'user_id' => $owner->id,
+            'book_request_id' => $bookRequest->id,
+        ]);
+    }
+
+    public function test_owner_does_not_see_vote_control_on_own_request(): void
+    {
+        $owner = User::factory()->create();
+        BookRequest::factory()->create(['user_id' => $owner->id]);
+
+        $this->actingAs($owner)
+            ->get(route('member.book-requests.index'))
+            ->assertOk()
+            ->assertSee('Usulan Anda')
+            ->assertSee('Anda tidak dapat memberi vote pada usulan sendiri.')
+            ->assertDontSee('Vote buku ini');
+    }
+
     public function test_owner_delete_reduces_one_vote_and_keeps_the_request(): void
     {
         $owner = User::factory()->create();

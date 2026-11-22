@@ -61,7 +61,8 @@
                                         </span>
                                         <div class="min-w-0">
                                             <p class="truncate font-semibold text-ink">{{ $user->name }}</p>
-                                            <p class="truncate text-xs text-muted">{{ $user->phone ?: 'Tanpa telepon' }}</p>
+                                            <p class="truncate text-xs text-muted">{{ $user->phone ? 'WA: '.$user->phone : 'Tanpa WhatsApp' }}</p>
+                                            <p class="truncate text-xs text-muted">{{ $user->parent_phone ? 'Ortu: '.$user->parent_phone : 'Tanpa no. orang tua' }}</p>
                                         </div>
                                     </div>
                                 </td>

@@ -13,7 +13,15 @@ class VoteBookRequestRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()?->isMember() ?? false;
+        $user = $this->user();
+
+        if ($user === null || ! $user->isMember()) {
+            return false;
+        }
+
+        $bookRequest = $this->route('bookRequest');
+
+        return ! ($bookRequest instanceof BookRequest && $bookRequest->user_id === $user->id);
     }
 
     /**
